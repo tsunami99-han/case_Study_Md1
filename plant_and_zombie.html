@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="plan_and_zombie.js"></script>
+</head>
+<style>
+    canvas {
+        border: 1px solid black;
+        background-color: hotpink;
+    }
+</style>
+<body onload="plant1.onload1()">
+<canvas width="1400px" height="600px" id="screen1"></canvas>
+<script>
+
+    let bullets = [];
+    let plant1 = new Plant(0,0)
+    let bullet = new Shoot(plant1);
+    let canvas = document.getElementById("screen1");
+    let context = canvas.getContext('2d');
+    let timeOutBullet = 1000;
+    let myBullet = setInterval(shootFromPlant, timeOutBullet);
+
+    function shootFromPlant() {
+        let bullet = new Shoot(plant1);
+        bullets.push(bullet);
+    }
+
+    function draw() {
+        context.clearRect(0, 0, 1400, 1000);
+        drawBulletsPlant(bullets)
+        plant1.onload1();
+        setTimeout(draw, 50);
+    }
+
+    function drawBulletsPlant(bullets) {
+        bullets.forEach(function (bullet) {
+            bullet.draw(context);
+            bullet.move();
+        })
+    }
+
+    draw()
+</script>
+</body>
+</html>
