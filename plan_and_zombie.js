@@ -37,7 +37,7 @@ Zombie = function (_x, _y,) {
         context.drawImage(this.image, this.x, this.y, this.width, this.height)
     }
     this.move = function () {
-        console.log(this.x)
+        // console.log(this.x)
         this.x -=5
     }
 }

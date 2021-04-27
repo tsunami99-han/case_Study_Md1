@@ -20,6 +20,7 @@
 
     let bullets = [];
     let zombies = [];
+    let zombieDeath = [];
     let score = 0;
     let zombieOut=0
     let plant = new Plant(0, 0, 100, 100);
@@ -55,11 +56,26 @@
         })
     }
 
+    function drawAllZombieDeath() {
+        for (let i = 0; i < zombieDeath.length; i++) {
+            zombieDeath[i].drawZombie(context);
+        }
+    }
+
+    function addZombieDeath(zombie) {
+        zombieDeath.push(zombie);
+        let index = zombieDeath.indexOf(zombie);
+        setTimeout(function () {
+            zombieDeath.splice(index,1);
+        },200);
+    }
+
 
     function draw() {
         context.clearRect(0, 0, 1400, 1000);
         drawBulletsPlant(bullets);
         drawZombieMove(zombies);
+        drawAllZombieDeath();
         plant.drawPlant();
         check();
         checkZombieOut()
@@ -72,8 +88,14 @@
             for (let j = 0; j < bullets.length; j++) {
                 if (checkCrash(zombies[i], bullets[j])) {
                     bullets.splice(j, 1);
+
+                    // setTimeout(zombies.splice,200,i,1)
+                    let death = new Zombie(zombies[i].x,zombies[i].y);
+                    death.image.src = 'boom.png';
+                    addZombieDeath(death);
                     zombies.splice(i, 1);
-                    score++
+
+                    score++;
                     document.getElementById('score').innerHTML = score
                     break;
                 }
@@ -88,7 +110,8 @@
             }
         }
         if(zombieOut>5){
-            alert('You lose!')
+            alert('You lose!');
+            window.location.reload();
         }
     }
     function checkCrash(obj1, obj2) {
