@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    -000
     <title>Title</title>
     <script src="plan_and_zombie.js"></script>
 </head>
@@ -22,7 +21,7 @@
     let zombies = [];
     let zombieDeath = [];
     let score = 0;
-    let zombieOut=0
+    let zombieOut = 0
     let plant = new Plant(0, 0, 100, 100);
     let canvas = document.getElementById("screen1");
     let context = canvas.getContext('2d');
@@ -44,8 +43,18 @@
         }
     }
 
+    function createShoot2() {
+        if (score > 2) {
+            let bullet = new Shoot(plant);
+            bullet.image.src = 'bullet2.png';
+            bullet.dmg = 3;
+            bullets.push(bullet);
+        }
+    }
+
     function createShoot() {
         let bullet = new Shoot(plant);
+        bullet.dmg = 2;
         bullets.push(bullet);
     }
 
@@ -55,21 +64,6 @@
             bullet.move();
         })
     }
-
-    function drawAllZombieDeath() {
-        for (let i = 0; i < zombieDeath.length; i++) {
-            zombieDeath[i].drawZombie(context);
-        }
-    }
-
-    function addZombieDeath(zombie) {
-        zombieDeath.push(zombie);
-        let index = zombieDeath.indexOf(zombie);
-        setTimeout(function () {
-            zombieDeath.splice(index,1);
-        },200);
-    }
-
 
     function draw() {
         context.clearRect(0, 0, 1400, 1000);
@@ -83,37 +77,65 @@
 
     }
 
+    function drawAllZombieDeath() {
+        for (let i = 0; i < zombieDeath.length; i++) {
+            zombieDeath[i].drawZombie(context);
+        }
+    }
+
+    function addZombieDeath(zombie) {
+        zombieDeath.push(zombie);
+        let index = zombieDeath.indexOf(zombie);
+        setTimeout(function () {
+            zombieDeath.splice(index, 1);
+        }, 200);
+    };
+
+
     function check() {
         for (let i = 0; i < zombies.length; i++) {
             for (let j = 0; j < bullets.length; j++) {
                 if (checkCrash(zombies[i], bullets[j])) {
+                    zombies[i].hp -= bullets[i].dmg
                     bullets.splice(j, 1);
+                    if (zombies[i].hp <= 0) {
+                        let death = new Zombie(zombies[i].x, zombies[i].y);
+                        death.image.src = 'boom.png';
+                        addZombieDeath(death);
+                        zombies.splice(i, 1);
+                        score++;
+                        document.getElementById('score').innerHTML = score
+                    }
+                    ;
+                    break;
 
                     // setTimeout(zombies.splice,200,i,1)
-                    let death = new Zombie(zombies[i].x,zombies[i].y);
-                    death.image.src = 'boom.png';
-                    addZombieDeath(death);
-                    zombies.splice(i, 1);
-
-                    score++;
-                    document.getElementById('score').innerHTML = score
-                    break;
+                    // let death = new Zombie(zombies[i].x,zombies[i].y);
+                    // death.image.src = 'boom.png';
+                    // addZombieDeath(death);
+                    // zombies.splice(i, 1);
+                    //
+                    // score++;
+                    // document.getElementById('score').innerHTML = score
+                    // break;
                 }
             }
         }
 
     }
-    function checkZombieOut(){
+
+    function checkZombieOut() {
         for (let i = 0; i < zombies.length; i++) {
-            if(zombies[i].x==0){
+            if (zombies[i].x == 0) {
                 zombieOut++
             }
         }
-        if(zombieOut>5){
+        if (zombieOut > 5) {
             alert('You lose!');
             window.location.reload();
         }
     }
+
     function checkCrash(obj1, obj2) {
         let left1 = obj1.x;
         let right1 = obj1.x + obj1.width;
@@ -146,7 +168,10 @@
                 plant.up();
                 break;
             case 'a':
-                createShoot()
+                createShoot();
+                break;
+            case 'b':
+                createShoot2()
                 break;
         }
     }

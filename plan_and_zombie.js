@@ -29,7 +29,7 @@ Zombie = function (_x, _y,) {
     this.y = _y;
     this.width = 100
     this.height = 100
-    this.hp = 6;
+    this.hp =6
     this.dmg = 1;
     this.image = new Image()
     this.image.src = 'zombielv' + (Math.round(Math.random() * 2) + 1) + '.png'
@@ -38,7 +38,7 @@ Zombie = function (_x, _y,) {
     }
     this.move = function () {
         // console.log(this.x)
-        this.x -=5
+        this.x -= 5
     }
 }
 Shoot = function (plant) {
