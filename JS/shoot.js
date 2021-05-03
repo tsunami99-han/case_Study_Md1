@@ -1,0 +1,1 @@
+Shoot = function (plant) {    this.x = plant.x    this.y = plant.y + 20;    this.width = 100;    this.height = 30;    this.dmg = plant.dmg    this.image = new Image()    this.image.src = 'Image/bullet.png'    this.draw = function (context) {        context.drawImage(this.image, this.x, this.y, 100, 50)    }    this.move = function () {        this.x += 10;    }}

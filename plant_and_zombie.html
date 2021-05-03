@@ -3,20 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="plan_and_zombie.js"></script>
+    <script src="JS/check.js"></script>
+    <script src="JS/plant.js"></script>
+    <script src="JS/shoot.js"></script>
+    <script src="JS/zombie.js"></script>
+    <script src="JS/functionCreat.js"></script>
 </head>
 <style>
+    body{
+        background-image: url("https://media1.giphy.com/media/VInghBdi0Ym9XJghC0/giphy.gif?cid=ecf05e474a83iioxlalmblk21d6jrj9uyvm1p9kbksfkymle&rid=giphy.gif&ct=g");
+    }
+
     canvas {
         border: 1px solid black;
-        background-color: hotpink;
+        background-color: green;
     }
 </style>
 <body onload="">
-<canvas width="1400px" height="600px" id="screen1"></canvas>
+<center><canvas width="1400px" height="610px" id="screen1"></canvas></center>
 <br>
-<p id="score"></p>
+<h2 id="score">Điểm của bạn là:</h2>
 <script>
-
     let bullets = [];
     let zombies = [];
     let zombieDeath = [];
@@ -25,138 +32,10 @@
     let plant = new Plant(0, 0, 100, 100);
     let canvas = document.getElementById("screen1");
     let context = canvas.getContext('2d');
-    // let timeOutBullet = 2000;
-    let timeOutZombie = 2000;
-    // let myBullet = setInterval(createShoot, timeOutBullet);
+    let timeOutZombie = 1000;
     let myZombie = setInterval(createZombie, timeOutZombie);
-
-    function createZombie() {
-        let zombie1 = new Zombie(1400, Math.round(Math.random() * 5) * 100);
-        zombies.push(zombie1);
-    }
-    ;
-
-    function drawZombieMove(zombies) {
-        for (let i = 0; i < zombies.length; i++) {
-            zombies[i].move();
-            zombies[i].drawZombie(context);
-        }
-    }
-
-    function createShoot2() {
-        if (score > 2) {
-            let bullet = new Shoot(plant);
-            bullet.image.src = 'bullet2.png';
-            bullet.dmg = 3;
-            bullets.push(bullet);
-        }
-    }
-
-    function createShoot() {
-        let bullet = new Shoot(plant);
-        bullet.dmg = 2;
-        bullets.push(bullet);
-    }
-
-    function drawBulletsPlant(bullets) {
-        bullets.forEach(function (bullet) {
-            bullet.draw(context);
-            bullet.move();
-        })
-    }
-
-    function draw() {
-        context.clearRect(0, 0, 1400, 1000);
-        drawBulletsPlant(bullets);
-        drawZombieMove(zombies);
-        drawAllZombieDeath();
-        plant.drawPlant();
-        check();
-        checkZombieOut()
-        requestAnimationFrame(draw);
-
-    }
-
-    function drawAllZombieDeath() {
-        for (let i = 0; i < zombieDeath.length; i++) {
-            zombieDeath[i].drawZombie(context);
-        }
-    }
-
-    function addZombieDeath(zombie) {
-        zombieDeath.push(zombie);
-        let index = zombieDeath.indexOf(zombie);
-        setTimeout(function () {
-            zombieDeath.splice(index, 1);
-        }, 200);
-    };
-
-
-    function check() {
-        for (let i = 0; i < zombies.length; i++) {
-            for (let j = 0; j < bullets.length; j++) {
-                if (checkCrash(zombies[i], bullets[j])) {
-                    zombies[i].hp -= bullets[i].dmg
-                    bullets.splice(j, 1);
-                    if (zombies[i].hp <= 0) {
-                        let death = new Zombie(zombies[i].x, zombies[i].y);
-                        death.image.src = 'boom.png';
-                        addZombieDeath(death);
-                        zombies.splice(i, 1);
-                        score++;
-                        document.getElementById('score').innerHTML = score
-                    }
-                    ;
-                    break;
-
-                    // setTimeout(zombies.splice,200,i,1)
-                    // let death = new Zombie(zombies[i].x,zombies[i].y);
-                    // death.image.src = 'boom.png';
-                    // addZombieDeath(death);
-                    // zombies.splice(i, 1);
-                    //
-                    // score++;
-                    // document.getElementById('score').innerHTML = score
-                    // break;
-                }
-            }
-        }
-
-    }
-
-    function checkZombieOut() {
-        for (let i = 0; i < zombies.length; i++) {
-            if (zombies[i].x == 0) {
-                zombieOut++
-            }
-        }
-        if (zombieOut > 5) {
-            alert('You lose!');
-            window.location.reload();
-        }
-    }
-
-    function checkCrash(obj1, obj2) {
-        let left1 = obj1.x;
-        let right1 = obj1.x + obj1.width;
-        let top1 = obj1.y;
-        let bottom1 = obj1.y + obj1.height;
-
-        let left2 = obj2.x;
-        let right2 = obj2.x + obj2.width;
-        let top2 = obj2.y;
-        let bottom2 = obj2.y + obj2.height;
-        if (right1 < left2 || top1 > bottom2 || left1 > right2 || bottom1 < top2) {
-            return false;
-        } else {
-            return true;
-        }
-
-    }
-
-
     draw()
-    window.addEventListener('keydown', move);
+    window.addEventListener('keyup', move);
 
     function move(evt) {
         console.log(evt.key);
@@ -169,9 +48,6 @@
                 break;
             case 'a':
                 createShoot();
-                break;
-            case 'b':
-                createShoot2()
                 break;
         }
     }
